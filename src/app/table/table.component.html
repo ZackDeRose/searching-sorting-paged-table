@@ -35,19 +35,25 @@
   
   <!-- Hero Name Column -->
   <ng-container cdkColumnDef="name">
-    <th cdk-header-cell *cdkHeaderCellDef> Hero Name </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('name')"> 
+      Hero Name <span *ngIf="sortKey$.value === 'name'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <td cdk-cell *cdkCellDef="let row"> {{row.name}} </td>
   </ng-container>
 
   <!-- Hero Types Column -->
   <ng-container cdkColumnDef="types">
-    <th cdk-header-cell *cdkHeaderCellDef> Types </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('types')">
+      Types <span *ngIf="sortKey$.value === 'types'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <td cdk-cell *cdkCellDef="let row"> {{row.types}} </td>
   </ng-container>
 
   <!-- Hero Attack Column -->
   <ng-container cdkColumnDef="attack">
-    <th cdk-header-cell *cdkHeaderCellDef> Attack </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('attack')">
+      Attack <span *ngIf="sortKey$.value === 'attack'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+     </th>
     <td cdk-cell 
         *cdkCellDef="let row" 
         [ngClass]="{ 
@@ -60,7 +66,9 @@
 
   <!-- Hero Defense Column -->
   <ng-container cdkColumnDef="defense">
-    <th cdk-header-cell *cdkHeaderCellDef> Defense </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('defense')">
+      Defense <span *ngIf="sortKey$.value === 'defense'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <td cdk-cell 
         *cdkCellDef="let row" 
         [ngClass]="{ 
@@ -73,7 +81,9 @@
 
   <!-- Hero Speed Column -->
   <ng-container cdkColumnDef="speed">
-    <th cdk-header-cell *cdkHeaderCellDef> Speed </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('speed')">
+      Speed <span *ngIf="sortKey$.value === 'speed'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <<td cdk-cell 
     *cdkCellDef="let row" 
     [ngClass]="{ 
@@ -86,7 +96,9 @@
 
   <!-- Hero Healing Column -->
   <ng-container cdkColumnDef="healing">
-    <th cdk-header-cell *cdkHeaderCellDef> Healing </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('healing')">
+      Healing <span *ngIf="sortKey$.value === 'healing'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <td cdk-cell 
         *cdkCellDef="let row" 
         [ngClass]="{ 
@@ -99,7 +111,9 @@
 
   <!-- Hero Recovery Column -->
   <ng-container cdkColumnDef="recovery">
-    <th cdk-header-cell *cdkHeaderCellDef> Recovery </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('recovery')">
+      Recovery <span *ngIf="sortKey$.value === 'recovery'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <td cdk-cell 
         *cdkCellDef="let row" 
         [ngClass]="{ 
@@ -112,7 +126,9 @@
 
   <!-- Hero Health Column -->
   <ng-container cdkColumnDef="health">
-    <th cdk-header-cell *cdkHeaderCellDef> Health </th>
+    <th cdk-header-cell *cdkHeaderCellDef (click)="adjustSort('health')">
+      Health <span *ngIf="sortKey$.value === 'health'">{{ sortDirection$.value === 'asc' ? '↥' : '↧' }}</span>
+    </th>
     <td cdk-cell 
         *cdkCellDef="let row" 
         [ngClass]="{ 

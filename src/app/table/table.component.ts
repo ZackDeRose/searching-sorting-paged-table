@@ -110,6 +110,8 @@ export class TableComponent implements OnInit {
   pageSize$ = new BehaviorSubject<number>(5);
   dataOnPage$ = new BehaviorSubject<any[]>([]);
   searchFormControl = new FormControl();
+  sortKey$ = new BehaviorSubject<string>('name');
+  sortDirection$ = new BehaviorSubject<string>('asc');
 
   constructor() { }
 
@@ -160,26 +162,47 @@ export class TableComponent implements OnInit {
       this.tableDataSource$.next(Object.values(heroData));
     });
 
-    combineLatest(this.heroes$, this.searchFormControl.valueChanges)
-    .subscribe(([changedHeroData, searchTerm]) => {
+    combineLatest(this.heroes$, this.searchFormControl.valueChanges, this.sortKey$, this.sortDirection$)
+    .subscribe(([changedHeroData, searchTerm, sortKey, sortDirection]) => {
       const heroesArray = Object.values(changedHeroData);
+      let filteredHeroes: any[];
 
       if (!searchTerm) {
-        this.tableDataSource$.next(heroesArray);
-        return;
+        filteredHeroes = heroesArray;
+      } else {
+        const filteredResults = heroesArray.filter(hero => {
+          return Object.values(hero)
+            .reduce((prev, curr) => {
+              return prev || curr.toString().toLowerCase().includes(searchTerm.toLowerCase());
+            }, false);
+        });
+        filteredHeroes = filteredResults;
       }
 
-      const filteredResults = heroesArray.filter(hero => {
-        return Object.values(hero)
-          .reduce((prev, curr) => {
-            return prev || curr.toString().toLowerCase().includes(searchTerm.toLowerCase());
-          }, false);
+      const sortedHeroes = filteredHeroes.sort((a, b) => {
+        if(a[sortKey] > b[sortKey]) return sortDirection === 'asc' ? 1 : -1;
+        if(a[sortKey] < b[sortKey]) return sortDirection === 'asc' ? -1 : 1;
+        return 0;
       });
 
-      this.tableDataSource$.next(filteredResults);
+      this.tableDataSource$.next(sortedHeroes);
     });
 
     this.searchFormControl.setValue('');
+  }
+
+  adjustSort(key: string) {
+    if (this.sortKey$.value === key) {
+      if (this.sortDirection$.value === 'asc') {
+        this.sortDirection$.next('desc');
+      } else {
+        this.sortDirection$.next('asc');
+      }
+      return;
+    }
+
+    this.sortKey$.next(key);
+    this.sortDirection$.next('asc');
   }
 
   levelUp(heroName: string) {
