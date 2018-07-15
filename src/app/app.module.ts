@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
 
 import {CdkTableModule} from '@angular/cdk/table';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,10 @@ import {CdkTableModule} from '@angular/cdk/table';
   ],
   imports: [
     BrowserModule,
-    CdkTableModule
+    CdkTableModule,
+    NgbModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

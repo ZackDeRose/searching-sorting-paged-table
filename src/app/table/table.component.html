@@ -1,4 +1,37 @@
-<table cdk-table [dataSource]="tableDataSource$" class="table table-hover">
+<div class="row">
+  <div class="col-6">
+    <div class="form-inline">
+      <div class="form-group">
+        <div class="input-group mr-3">
+            <input 
+              type="text" 
+              class="form-control"
+              placeholder="Search..."
+              [formControl]="searchFormControl">
+            <div class="input-group-append">
+              <button 
+                class="btn btn-outline-secondary"
+                (click)="searchFormControl.setValue('')">
+                x
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="float-right">
+      <ngb-pagination 
+        [collectionSize]="tableDataSource$.value.length" 
+        [pageSize]="pageSize$.value"
+        [page]="currentPage$.value"
+        (pageChange)="currentPage$.next($event)">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<table cdk-table [dataSource]="dataOnPage$" class="table table-hover">
   
   <!-- Hero Name Column -->
   <ng-container cdkColumnDef="name">

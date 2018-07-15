@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-table',
@@ -103,13 +106,15 @@ export class TableComponent implements OnInit {
     'health',
     'levelUp'
   ]);
+  currentPage$ = new BehaviorSubject<number>(1);
+  pageSize$ = new BehaviorSubject<number>(5);
+  dataOnPage$ = new BehaviorSubject<any[]>([]);
+  searchFormControl = new FormControl();
 
   constructor() { }
 
   ngOnInit() {
     this.heroes$.subscribe(changedHeroData => {
-      this.tableDataSource$.next(Object.values(changedHeroData));
-
       const superlatives = {
         'highest-attack': null,
         'lowest-attack': null,
@@ -143,6 +148,38 @@ export class TableComponent implements OnInit {
 
       this.superlatives$.next(superlatives);
     });
+
+    combineLatest(this.tableDataSource$, this.currentPage$, this.pageSize$)
+    .subscribe(([allSources, currentPage, pageSize]) => {
+      const startingIndex = (currentPage - 1) * pageSize;
+      const onPage = allSources.slice(startingIndex, startingIndex + pageSize);
+      this.dataOnPage$.next(onPage);
+    });
+
+    this.heroes$.pipe(take(1)).subscribe(heroData => {
+      this.tableDataSource$.next(Object.values(heroData));
+    });
+
+    combineLatest(this.heroes$, this.searchFormControl.valueChanges)
+    .subscribe(([changedHeroData, searchTerm]) => {
+      const heroesArray = Object.values(changedHeroData);
+
+      if (!searchTerm) {
+        this.tableDataSource$.next(heroesArray);
+        return;
+      }
+
+      const filteredResults = heroesArray.filter(hero => {
+        return Object.values(hero)
+          .reduce((prev, curr) => {
+            return prev || curr.toString().toLowerCase().includes(searchTerm.toLowerCase());
+          }, false);
+      });
+
+      this.tableDataSource$.next(filteredResults);
+    });
+
+    this.searchFormControl.setValue('');
   }
 
   levelUp(heroName: string) {
