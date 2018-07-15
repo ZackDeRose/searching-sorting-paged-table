@@ -78,6 +78,16 @@ export class TableComponent implements OnInit {
       healing: 123,
       recovery: 144,
       speed: 286
+    },
+    'Dancer Galileo': {
+      name: 'Dancer Galileo',
+      types: 'Air/Holy',
+      health: 517,
+      attack: 116,
+      defense: 180,
+      healing: 229,
+      recovery: 168,
+      speed: 405
     }
   });
   superlatives$ = new BehaviorSubject<{[superlativeName: string]: string}>({});
